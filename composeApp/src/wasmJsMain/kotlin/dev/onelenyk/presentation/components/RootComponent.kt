@@ -39,7 +39,7 @@ class DefaultRootComponent(
         childStack(
             source = menuNavigation,
             serializer = RootComponent.RootConfig.serializer(),
-            initialConfiguration = RootComponent.RootConfig.Main,
+            initialConfiguration = RootComponent.RootConfig.Hello,
             handleBackButton = true,
             childFactory = ::createChild,
         )
@@ -51,13 +51,17 @@ class DefaultRootComponent(
         return when(config){
             RootComponent.RootConfig.Lenyk -> RootComponent.RootEntry.Lenyk(Clock.System.now().epochSeconds)
             RootComponent.RootConfig.Main -> RootComponent.RootEntry.Main("")
+            RootComponent.RootConfig.Hello -> {
+                val component = DefaultHelloComponent(context)
+
+                return RootComponent.RootEntry.Hello(component)
+            }
         }
     }
 
     init {
         coroutineScope.launch {
-            delay(10000L)
-            menuNavigation.pushCatch(RootComponent.RootConfig.Lenyk)
+          //  menuNavigation.pushCatch(RootComponent.RootConfig.Hello)
         }
     }
 }

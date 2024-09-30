@@ -31,12 +31,10 @@ fun RootContainer(component: RootComponent) {
                 LenykScreen(component)
             }
 
-            else -> {
-                Text("Null")
+            is RootComponent.RootEntry.Hello -> {
+                HelloScreen(currentScreen.component)
             }
         }
     }
-
-
     return
 }
