@@ -20,6 +20,7 @@ interface RootComponent {
     sealed class RootEntry {
         data class Main(val title:String) : RootEntry()
         data class Lenyk(val timeStamp: Long) : RootEntry()
+        data class Hello(val component: HelloComponent) : RootEntry()
     }
 
     @Serializable
@@ -27,6 +28,7 @@ interface RootComponent {
         @Serializable
         data object Main : RootConfig()
         data object Lenyk : RootConfig()
+        data object Hello : RootConfig()
     }
 }
 
