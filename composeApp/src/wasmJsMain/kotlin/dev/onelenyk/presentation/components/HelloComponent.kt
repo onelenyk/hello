@@ -1,5 +1,12 @@
 package dev.onelenyk.presentation.components
 
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.sp
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
@@ -18,7 +25,73 @@ import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
 import org.jetbrains.skia.Data
 
-data class HelloState(val title: String = "Hello")
+data class HelloState(
+    val title: String = "Hello",
+    val name: String = "Nazar Lenyk",
+    val position: String = "Android Engineer",
+
+    val telegram: String = "https://t.me/onelenyk",
+    val github: String = "https://github.com/onelenyk/",
+    val linkedin: String = "https://www.linkedin.com/in/onelenyk/",
+    val instagram: String = "none",
+) {
+    val description: AnnotatedString = buildDefaultDescription()
+    val shortStory: AnnotatedString = buildDefaultShortStory()
+
+    val uiTitle: AnnotatedString
+        get() = AnnotatedString(
+            text = title,
+            spanStyle = TextStyle(
+                color = Color.Black,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W600
+            ).toSpanStyle()
+        )
+
+    private fun buildDefaultDescription() = buildAnnotatedString {
+        withStyle(
+            style = TextStyle(
+                color = Color.Black,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W600
+            ).toSpanStyle()
+        ) {
+            append(name)
+        }
+        withStyle(
+            style = TextStyle(
+                color = Color.Gray,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W600
+            ).toSpanStyle()
+        ) {
+            append(", an ")
+            append(position)
+        }
+    }
+
+    private fun buildDefaultShortStory() = buildAnnotatedString {
+        withStyle(
+            style = TextStyle(
+                color = Color.Black,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W600
+            ).toSpanStyle()
+        ) {
+            append("I do love playing with different things: ")
+        }
+        withStyle(
+            style = TextStyle(
+                color = Color.Gray,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W600
+            ).toSpanStyle()
+        ) {
+            append("kotlin(android, ktor, cli, kmp, tg bots), flutter, arduino-like, ffmpeg(something)")
+        }
+    }
+
+}
 
 interface HelloComponent {
     val state: StateFlow<HelloState>
@@ -32,8 +105,8 @@ class DefaultHelloComponent(
         coroutineScope.launch {
             val translations = getHelloTranslations()
 
-            while (isActive){
-                if(!isActive)return@launch
+            while (isActive) {
+                if (!isActive) return@launch
 
                 for (translation in translations) {
                     _state.update {
@@ -61,8 +134,7 @@ class DefaultHelloComponent(
             "Ciao",     // Italian
             "Olá",      // Portuguese
             "Hej",      // Swedish
-            "Hallo" ,    // Dutch,
-            "\uD83D\uDC7E \uD83D\uDC7E \uD83D\uDC7E"
+            "Hallo",    // Dutch,
         )
     }
 }
