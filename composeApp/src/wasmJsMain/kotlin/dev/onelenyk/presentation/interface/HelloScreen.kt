@@ -18,19 +18,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Call
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,14 +44,20 @@ import dev.onelenyk.Greeting
 import dev.onelenyk.presentation.components.HelloComponent
 import dev.onelenyk.presentation.components.HelloState
 import dev.onelenyk.presentation.components.RootComponent
-import dev.onelenyk.presentation.`interface`.GithubBrandsSolid
 import hello.composeapp.generated.resources.Res
 import hello.composeapp.generated.resources.compose_multiplatform
 import hello.composeapp.generated.resources.github_icon
 import hello.composeapp.generated.resources.instagram_brands_solid
 import hello.composeapp.generated.resources.linkedin_brands_solid
+import hello.composeapp.generated.resources.resume_icon
 import hello.composeapp.generated.resources.telegram_brands_solid
+import kotlinx.browser.document
 import kotlinx.browser.window
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.internal.JSJoda.DateTimeFormatter
+import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -71,6 +72,14 @@ fun String.openInBrowser() {
 fun HelloScreen(component: HelloComponent) {
     val state = component.state.collectAsState()
     HelloContent(state = state.value)
+    PageTitle(title = state.value.pageTitle)
+}
+
+@Composable
+fun PageTitle(title: String) {
+    LaunchedEffect(title) {
+        document.title = title
+    }
 }
 
 @Composable
@@ -100,8 +109,10 @@ fun HelloContent(state: HelloState) {
                 StoryItem(story = state.shortStory)
                 Spacer(modifier = Modifier.height(16.dp))
                 SocialMediaButtons(state = state)
+                ResumeButton()
             }
 
+            OneTimeInitCurrentTime()
             PoweredByComposeMultiplatform()
             // Any further items can be added here
         }
@@ -138,7 +149,7 @@ fun ItemRow(content: @Composable () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        HorizontalDivider()
+        //  HorizontalDivider()
         Spacer(modifier = Modifier.weight(1f))
         Spacer(modifier = Modifier.width(12.dp))
         content()
@@ -146,7 +157,7 @@ fun ItemRow(content: @Composable () -> Unit) {
 }
 
 @Composable
-fun VerticalDivider() =  Box(
+fun VerticalDivider() = Box(
     modifier = Modifier
         .width(2.dp)
         .height(6.dp)
@@ -154,7 +165,7 @@ fun VerticalDivider() =  Box(
 )
 
 @Composable
-fun HorizontalDivider() =  Box(
+fun HorizontalDivider() = Box(
     modifier = Modifier
         .width(6.dp)
         .height(2.dp)
@@ -207,33 +218,100 @@ fun SocialMediaButtons(state: HelloState) {
     )
     val labels = listOf("tg", "link", "inst", "git")
     val links = listOf(state.telegram, state.linkedin, state.instagram, state.github)
+    Column {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 16.dp)
+        ) {
+            icons.forEachIndexed { index, icon ->
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    // VerticalDivider()
+
+                    CustomIconButton(
+                        icon = icon,
+                        contentDescription = labels[index],
+                        onClick = {
+                            links[index].openInBrowser()
+                        }
+                    )
+                    Text(
+                        text = labels[index],
+                        color = Color.Black,
+                        fontSize = 12.sp
+                    )
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalResourceApi::class)
+@Composable
+fun ResumeButton() {
     Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 24.dp, vertical = 16.dp)
     ) {
-        icons.forEachIndexed { index, icon ->
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                VerticalDivider()
-
-                CustomIconButton(
-                    icon = icon,
-                    contentDescription = labels[index],
-                    onClick = {
-                        links[index].openInBrowser()
-                    }
-                )
-                Text(
-                    text = labels[index],
-                    color = Color.Black,
-                    fontSize = 12.sp
-                )
-            }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CustomIconButton(
+                icon = vectorResource(Res.drawable.resume_icon),
+                contentDescription = "Resume",
+                onClick = {
+                    val uri  = Res.getUri("files/lenyk_resume.pdf")
+                    print(uri)
+                    DownloadFileButton(uri, "lenyk_resume.pdf");
+                }
+            )
+            Text(
+                text = "Resume",
+                color = Color.Black,
+                fontSize = 12.sp
+            )
         }
     }
+}
+
+fun DownloadFileButton(fileUrl: String, fileName: String = "downloaded_file") {
+    val link = document.createElement("a") as org.w3c.dom.HTMLAnchorElement
+    link.href = fileUrl
+    link.download = fileName
+    link.click()
+}
+
+
+@Composable
+fun OneTimeInitCurrentTime() {
+    // Remember the current time only once
+    val currentTime = remember { Clock.System.now() }
+
+    // Format the current time
+    val formattedTime = remember(currentTime) {
+        val localDateTime = currentTime.toLocalDateTime(TimeZone.currentSystemDefault())
+        buildString {
+            append(localDateTime.year)
+            append("-")
+            append(localDateTime.monthNumber.toString().padStart(2, '0'))
+            append("-")
+            append(localDateTime.dayOfMonth.toString().padStart(2, '0'))
+            append(" ")
+            append(localDateTime.hour.toString().padStart(2, '0'))
+            append(":")
+            append(localDateTime.minute.toString().padStart(2, '0'))
+            append(":")
+            append(localDateTime.second.toString().padStart(2, '0'))
+        }
+    }
+
+    // Display the formatted time
+    Text(text = formattedTime)
 }
 
 @Composable
@@ -253,8 +331,7 @@ fun PoweredByComposeMultiplatform() {
                 .clickable {
                     link.openInBrowser()
                 }
-                .padding(4.dp)
-            ,
+                .padding(4.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
