@@ -109,12 +109,12 @@ fun HelloContent(state: HelloState) {
                 StoryItem(story = state.shortStory)
                 Spacer(modifier = Modifier.height(16.dp))
                 SocialMediaButtons(state = state)
-                ResumeButton()
             }
 
             OneTimeInitCurrentTime()
+
             PoweredByComposeMultiplatform()
-            // Any further items can be added here
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
@@ -287,9 +287,15 @@ fun OneTimeInitCurrentTime() {
             append(localDateTime.second.toString().padStart(2, '0'))
         }
     }
-
-    // Display the formatted time
-    Text(text = formattedTime)
+    Text(
+        text = formattedTime,
+        modifier = Modifier
+            .wrapContentSize(),
+        fontSize = 12.sp,
+        fontWeight = FontWeight.ExtraLight,
+        lineHeight = 18.sp,
+        color = Color(0xff000000)
+    )
 }
 
 @Composable
@@ -298,8 +304,7 @@ fun PoweredByComposeMultiplatform() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .padding(bottom = 16.dp),
+            .padding(vertical = 8.dp),
         contentAlignment = Alignment.Center
     ) {
         Row(
