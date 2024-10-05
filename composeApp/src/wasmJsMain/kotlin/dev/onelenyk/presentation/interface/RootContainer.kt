@@ -13,6 +13,7 @@ import com.arkivanov.decompose.extensions.compose.stack.Children
 import dev.onelenyk.Greeting
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.runtime.LaunchedEffect
 import dev.onelenyk.presentation.components.RootComponent
 
 
@@ -30,11 +31,12 @@ fun RootContainer(component: RootComponent) {
             is RootComponent.RootEntry.Lenyk -> {
                 LenykScreen(component)
             }
-
             is RootComponent.RootEntry.Hello -> {
                 HelloScreen(currentScreen.component)
             }
+
         }
     }
+
     return
 }
