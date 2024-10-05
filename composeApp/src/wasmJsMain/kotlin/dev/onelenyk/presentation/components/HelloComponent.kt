@@ -14,6 +14,12 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.Value
 import dev.onelenyk.presentation.coroutineScope
 import dev.onelenyk.presentation.pushCatch
+import hello.composeapp.generated.resources.Res
+import hello.composeapp.generated.resources.github_icon
+import hello.composeapp.generated.resources.instagram_brands_solid
+import hello.composeapp.generated.resources.linkedin_brands_solid
+import hello.composeapp.generated.resources.resume_icon
+import hello.composeapp.generated.resources.telegram_brands_solid
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,18 +29,44 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.Resource
+import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.skia.Data
 
-data class HelloState(
+data class HelloState @OptIn(ExperimentalResourceApi::class) constructor(
     val pageTitle: String = "Hello | Nazar Lenyk ",
     val title: String = "Hello",
     val name: String = "Nazar Lenyk",
     val position: String = "Android Engineer",
-
-    val telegram: String = "https://t.me/onelenyk",
-    val github: String = "https://github.com/onelenyk/",
-    val linkedin: String = "https://www.linkedin.com/in/onelenyk/",
-    val instagram: String = "none",
+    val socials: List<Social> = listOf(
+        Social(
+            title = "tg",
+            icon = Res.drawable.telegram_brands_solid,
+            url = "https://t.me/onelenyk"
+        ),
+        Social(
+            title = "link",
+            icon = Res.drawable.linkedin_brands_solid,
+            url = "https://www.linkedin.com/in/onelenyk/"
+        ),
+      /*  Social(
+            title = "inst",
+            icon = Res.drawable.instagram_brands_solid,
+            url = "https://t.me/onelenyk"
+        ),*/
+        Social(
+            title = "git",
+            icon = Res.drawable.github_icon,
+            url = "https://github.com/onelenyk/"
+        ),
+        Social(
+            title = "resume",
+            icon = Res.drawable.resume_icon,
+            url = "lenyk_resume.pdf"
+        )
+    )
 ) {
     val description: AnnotatedString = buildDefaultDescription()
     val shortStory: AnnotatedString = buildDefaultShortStory()
@@ -92,6 +124,11 @@ data class HelloState(
         }
     }
 
+    data class Social(
+        val title: String,
+        val icon: DrawableResource,
+        val url: String
+    )
 }
 
 interface HelloComponent {
