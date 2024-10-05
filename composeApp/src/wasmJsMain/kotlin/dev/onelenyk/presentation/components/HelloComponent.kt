@@ -26,6 +26,7 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.skia.Data
 
 data class HelloState(
+    val pageTitle: String = "Hello | Nazar Lenyk ",
     val title: String = "Hello",
     val name: String = "Nazar Lenyk",
     val position: String = "Android Engineer",
