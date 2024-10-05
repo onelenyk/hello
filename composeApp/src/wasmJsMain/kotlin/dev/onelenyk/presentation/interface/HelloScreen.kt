@@ -210,14 +210,6 @@ fun CustomIconButton(
 
 @Composable
 fun SocialMediaButtons(state: HelloState) {
-    val icons = listOf(
-        vectorResource(Res.drawable.telegram_brands_solid), // Replace with actual icons for your case
-        vectorResource(Res.drawable.linkedin_brands_solid), // Replace with actual icons for your case
-        vectorResource(Res.drawable.instagram_brands_solid), // Replace with actual icons for your case
-        vectorResource(Res.drawable.github_icon), // Replace with actual icons for your case
-    )
-    val labels = listOf("tg", "link", "inst", "git")
-    val links = listOf(state.telegram, state.linkedin, state.instagram, state.github)
     Column {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -225,21 +217,19 @@ fun SocialMediaButtons(state: HelloState) {
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
-            icons.forEachIndexed { index, icon ->
+            state.socials.forEachIndexed { index, item ->
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // VerticalDivider()
-
                     CustomIconButton(
-                        icon = icon,
-                        contentDescription = labels[index],
+                        icon = vectorResource(item.icon),
+                        contentDescription = item.title,
                         onClick = {
-                            links[index].openInBrowser()
+                            item.url.openInBrowser()
                         }
                     )
                     Text(
-                        text = labels[index],
+                        text = item.title,
                         color = Color.Black,
                         fontSize = 12.sp
                     )
@@ -251,7 +241,7 @@ fun SocialMediaButtons(state: HelloState) {
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun ResumeButton() {
+fun ResumeButton(state: HelloState) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -265,9 +255,7 @@ fun ResumeButton() {
                 icon = vectorResource(Res.drawable.resume_icon),
                 contentDescription = "Resume",
                 onClick = {
-                    val uri  = Res.getUri("files/lenyk_resume.pdf")
-                    print(uri)
-                    DownloadFileButton(uri, "lenyk_resume.pdf");
+                    //  DownloadFileButton(state.resumeLink, "Nazar_Lenyk_Resume.pdf");
                 }
             )
             Text(
@@ -279,20 +267,10 @@ fun ResumeButton() {
     }
 }
 
-fun DownloadFileButton(fileUrl: String, fileName: String = "downloaded_file") {
-    val link = document.createElement("a") as org.w3c.dom.HTMLAnchorElement
-    link.href = fileUrl
-    link.download = fileName
-    link.click()
-}
-
-
 @Composable
 fun OneTimeInitCurrentTime() {
-    // Remember the current time only once
     val currentTime = remember { Clock.System.now() }
 
-    // Format the current time
     val formattedTime = remember(currentTime) {
         val localDateTime = currentTime.toLocalDateTime(TimeZone.currentSystemDefault())
         buildString {
