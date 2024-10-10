@@ -36,7 +36,7 @@ import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.skia.Data
 
 data class HelloState @OptIn(ExperimentalResourceApi::class) constructor(
-    val pageTitle: String = "Hello | Nazar Lenyk ",
+    val pageTitle: String = "Hello | Nazar Lenyk",
     val title: String = "Hello",
     val name: String = "Nazar Lenyk",
     val position: String = "Android Engineer",

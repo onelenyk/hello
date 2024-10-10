@@ -7,7 +7,9 @@ import kotlinx.browser.document
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
-    ComposeViewport(document.body!!) {
+    val appElement = document.getElementById("app") ?: error("App element not found")
+
+    ComposeViewport(appElement) {
         App()
     }
 }
