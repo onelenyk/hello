@@ -1,7 +1,5 @@
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.Indication
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,49 +16,31 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.arkivanov.decompose.extensions.compose.stack.Children
-import dev.onelenyk.Greeting
 import dev.onelenyk.presentation.components.HelloComponent
 import dev.onelenyk.presentation.components.HelloState
-import dev.onelenyk.presentation.components.RootComponent
 import hello.composeapp.generated.resources.Res
 import hello.composeapp.generated.resources.compose_multiplatform
-import hello.composeapp.generated.resources.github_icon
-import hello.composeapp.generated.resources.instagram_brands_solid
-import hello.composeapp.generated.resources.linkedin_brands_solid
-import hello.composeapp.generated.resources.resume_icon
-import hello.composeapp.generated.resources.telegram_brands_solid
 import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.internal.JSJoda.DateTimeFormatter
 import kotlinx.datetime.toLocalDateTime
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.vectorResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
 // Extension function to open a URL in the web browser
@@ -157,33 +137,6 @@ fun ItemRow(content: @Composable () -> Unit) {
 }
 
 @Composable
-fun VerticalDivider() = Box(
-    modifier = Modifier
-        .width(2.dp)
-        .height(6.dp)
-        .background(Color.Black, RoundedCornerShape(4.dp))
-)
-
-@Composable
-fun HorizontalDivider() = Box(
-    modifier = Modifier
-        .width(6.dp)
-        .height(2.dp)
-        .background(Color.Black, RoundedCornerShape(4.dp))
-)
-
-@Composable
-fun Divider() = Text(
-    modifier = Modifier.padding(horizontal = 8.dp),
-    text = "-",
-    style = TextStyle(
-        color = Color.Black,
-        fontSize = 16.sp,
-        fontWeight = FontWeight.W600
-    )
-)
-
-@Composable
 fun CustomIconButton(
     icon: ImageVector,
     contentDescription: String?,
@@ -235,34 +188,6 @@ fun SocialMediaButtons(state: HelloState) {
                     )
                 }
             }
-        }
-    }
-}
-
-@OptIn(ExperimentalResourceApi::class)
-@Composable
-fun ResumeButton(state: HelloState) {
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 16.dp)
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            CustomIconButton(
-                icon = vectorResource(Res.drawable.resume_icon),
-                contentDescription = "Resume",
-                onClick = {
-                    //  DownloadFileButton(state.resumeLink, "Nazar_Lenyk_Resume.pdf");
-                }
-            )
-            Text(
-                text = "Resume",
-                color = Color.Black,
-                fontSize = 12.sp
-            )
         }
     }
 }
