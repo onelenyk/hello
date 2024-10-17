@@ -6,12 +6,9 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.Value
 import dev.onelenyk.presentation.coroutineScope
-import dev.onelenyk.presentation.pushCatch
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
-import org.jetbrains.skia.Data
 
 interface RootComponent {
     val menuNavigationState: Value<ChildStack<RootConfig, RootEntry>>

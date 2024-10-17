@@ -8,15 +8,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.router.stack.ChildStack
-import com.arkivanov.decompose.router.stack.StackNavigation
-import com.arkivanov.decompose.router.stack.childStack
-import com.arkivanov.decompose.value.Value
 import dev.onelenyk.presentation.coroutineScope
-import dev.onelenyk.presentation.pushCatch
 import hello.composeapp.generated.resources.Res
 import hello.composeapp.generated.resources.github_icon
-import hello.composeapp.generated.resources.instagram_brands_solid
 import hello.composeapp.generated.resources.linkedin_brands_solid
 import hello.composeapp.generated.resources.resume_icon
 import hello.composeapp.generated.resources.telegram_brands_solid
@@ -27,13 +21,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
-import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.Resource
-import org.jetbrains.compose.resources.vectorResource
-import org.jetbrains.skia.Data
 
 data class HelloState @OptIn(ExperimentalResourceApi::class) constructor(
     val pageTitle: String = "Hello | Nazar Lenyk",
